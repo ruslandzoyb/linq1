@@ -2,6 +2,9 @@
 using Manager;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
@@ -31,7 +34,52 @@ namespace ConsoleApp1
 
 
 
+            var set = employees.Join(departments,
+                                       employ => employ.DebId,
+                                       depart => depart.Id,
+                                       (employ, depart) =>
+                                       new { Name = employ.FirstName, Surname = employ.LastName,Age= employ.Age, depart.Country, depart.City }
 
+
+                );
+
+            /////// 1
+            var task1 = set.Where(x => x.Country == "Ukraine" && x.City != "Donetsk");
+            foreach (var item in task1)
+            {
+                Console.WriteLine($"{item.Name}  {item.Surname} ");
+            }
+            Console.WriteLine("------------------------------------------------------------------------------------");
+            /////////
+
+
+
+            //2
+            var task2 = departments.Select(x=>x.Country).Distinct();
+            foreach (var item in task2)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine("------------------------------------------------------------------------------------");
+
+            //
+
+
+            //3
+            var task3 = employees.Where(x => x.Age > 25).Take(3);
+            foreach (var item in task3)
+            {
+                Console.WriteLine($"{item.FirstName}  {item.LastName} {item.Age}");
+            }
+            Console.WriteLine("------------------------------------------------------------------------------------");
+
+
+            var task4 = set.Where(x => x.City=="Kyiv" && x.Age > 23);
+            foreach (var item in task4)
+            {
+                Console.WriteLine($"{item.Name} {item.Surname}");
+            }
+            Console.WriteLine("------------------------------------------------------------------------------------");
             Console.ReadLine();
         }
     }
